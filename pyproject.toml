@@ -1,0 +1,49 @@
+# Packaging only. This file was added to the jc876/opensimAD fork so that
+# FT_synthbio can pin opensimAD as a dependency (decision D22). No upstream
+# file is changed: hatchling maps the existing files into an `opensimad`
+# package at build time.
+#
+#   utilities.py            -> opensimad/utilities.py
+#   buildExpressionGraph/   -> opensimad/buildExpressionGraph/
+#   buildExternalFunction/  -> opensimad/buildExternalFunction/
+#
+# Upstream: https://github.com/antoinefalisse/opensimAD
+# Base commit: 0d880b041c460448fbc2846be9072619d7855984 (Apache-2.0).
+
+[project]
+name = "opensimad"
+version = "0.0.0+ft.0d880b0.1"
+description = "OpenSimAD utilities and CMake projects, packaged unchanged from antoinefalisse/opensimAD@0d880b0."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+# What utilities.py imports at module level, from upstream requirements.txt.
+# `opensim` is also imported there but is left to the consumer, as upstream
+# installs it through conda. `cmake` is a build tool and is not declared.
+dependencies = ["casadi", "numpy", "pandas"]
+
+[project.urls]
+Upstream = "https://github.com/antoinefalisse/opensimAD"
+
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+bypass-selection = true
+
+[tool.hatch.build.targets.wheel.force-include]
+"utilities.py" = "opensimad/utilities.py"
+"buildExpressionGraph" = "opensimad/buildExpressionGraph"
+"buildExternalFunction" = "opensimad/buildExternalFunction"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/utilities.py",
+    "/buildExpressionGraph",
+    "/buildExternalFunction",
+    "/LICENSE",
+    "/README.md",
+    "/pyproject.toml",
+]
